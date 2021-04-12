@@ -1,0 +1,15 @@
+{
+  "name": "tag-game",
+  "version": "1.0.0",
+  "description": "This is game on pure JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+		"start": "parcel index.html"
+	},
+  "author": "Artem Alesenko <alesenko19961996@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}
