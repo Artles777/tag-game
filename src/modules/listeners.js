@@ -1,5 +1,5 @@
-import {$button, $container, $countTags, $field, $message, newCreateTag, $clicksTags} from './pattern'
-import {newSizeTags, shuffleTagElements} from "./helpers";
+import {$button, $container, $countTags, $field, $message, newCreateTag, $clicksTags, $timerToEnd} from './pattern'
+import {countdownTimer, newSizeTags, shuffleTagElements} from "./helpers";
 
 let play = false
 let restart = true
@@ -19,6 +19,7 @@ export function startRound(array) {
 			})
 			play = true
 			$message.style.display = 'none'
+			countdownTimer('01:00', '.timer')
 		}
 	}
 }
@@ -33,15 +34,16 @@ export function rotationTags(event) {
 		const { offsetTop, offsetLeft } = $null
 
 		if (id === 'field') return;
-		// if (offsetTop - $target.offsetTop > size) return;
-		// if (offsetLeft - $target.offsetLeft > size) return;
-		// if ($target.offsetTop - offsetTop > size) return;
-		// if ($target.offsetLeft - offsetLeft > size) return;
-		//
-		// if (offsetTop - $target.offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
-		// if ($target.offsetTop - offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
-		// if (offsetTop - $target.offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
-		// if ($target.offsetTop - offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
+		if ($target === $null) return;
+		if (offsetTop - $target.offsetTop > size) return;
+		if (offsetLeft - $target.offsetLeft > size) return;
+		if ($target.offsetTop - offsetTop > size) return;
+		if ($target.offsetLeft - offsetLeft > size) return;
+
+		if (offsetTop - $target.offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
+		if ($target.offsetTop - offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
+		if (offsetTop - $target.offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
+		if ($target.offsetTop - offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
 
 		$null.dataset.id = id
 		$target.dataset.id = 'null'
@@ -57,10 +59,12 @@ export function rotationTags(event) {
 				play = false
 				restart = true
 				$message.style.display = 'block'
-				alert(`Вы победили за ${clicks} хода!`)
+				alert(`Вы победили за ${clicks} ходов!`)
 				clicks = 0
 				$clicksTags.innerHTML = `Количество ходов: <b class="clicks_counter">${clicks}</b>`
 			}, 1000)
+		} else if ($timerToEnd.textContent === '00:00' && play) {
+			alert(`Вы проиграли!!! Сделано ${clicks} хода!`)
 		}
 	} else {
 		$container.prepend($message)
@@ -70,6 +74,10 @@ export function rotationTags(event) {
 export function changeFieldTags(tags) {
 	return function () {
 		if (restart) {
+
+			if ((+$countTags.value ^ 0) !== +$countTags.value) {
+				$countTags.value = Math.round(+$countTags.value)
+			}
 
 			if ($countTags.value < 3) {
 				$countTags.value = 3
@@ -91,5 +99,16 @@ export function changeFieldTags(tags) {
 
 			$button.addEventListener('click', startRound(tags))
 		}
+	}
+}
+
+export function triggerCounter(event) {
+	const e = new Event('change');
+	if (event.target.id === 'increment') {
+		$countTags.value = +$countTags.value + 1
+		$countTags.dispatchEvent(e)
+	} else {
+		$countTags.value = +$countTags.value - 1
+		$countTags.dispatchEvent(e)
 	}
 }

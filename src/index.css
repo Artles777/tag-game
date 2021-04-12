@@ -7,6 +7,8 @@
 	align-items: center;
 	justify-content: center;
 	flex-flow: column;
+	position: relative;
+	padding: 2rem 0;
 }
 
 .field {
@@ -36,7 +38,6 @@
 }
 
 .start {
-	margin-top: 2rem;
 	margin-bottom: 1rem;
 	padding: 5px 15px;
 	font-size: 16px;
@@ -44,23 +45,45 @@
 }
 
 .footer {
-	margin-bottom: 2rem;
+	display: flex;
+	align-items: center;
+	margin: 0.5rem 0;
+	padding: 0.5rem 0;
+}
+
+.count_wrapper{
+	display: inline-flex;
+	flex-flow: column;
 }
 
 .count {
-	margin-top: 30px;
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	font-size: 18px;
+	padding: 4px;
+	border: none;
+	outline: none;
+	margin-right: 4px;
+}
+
+.count_arrow {
+	font-size: 0.7rem;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
 }
 
 .label {
 	margin-right: 1rem;
+	font-size: 18px;
 }
 
 .clicks {
-	position: fixed;
-	top: 0;
-	right: 0;
-	margin-top: 75px;
-	margin-right: 250px;
+	position: absolute;
+	top: 1.5rem;
+	left: 1rem;
 }
 
 .clicks_counter {

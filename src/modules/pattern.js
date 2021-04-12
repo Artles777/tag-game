@@ -19,19 +19,32 @@ export const $label = createElement('label', ['label'], {
 
 export const $countTags = createElement('input', ['count'], {
 	type: 'number',
-	placeholder: 'Размер поля',
 	value: `${cols}`,
 	min: 3,
 	max: 12
+})
+
+export const $wrapperCountArrow = createElement('div', ['count_wrapper'])
+export const $arrowCountTop = createElement('i', ['count_arrow', 'bi', 'bi-caret-up-fill'], {
+	id: 'increment'
+})
+export const $arrowCountBottom = createElement('i', ['count_arrow', 'bi', 'bi-caret-down-fill'], {
+	id: 'decrement'
 })
 
 export const $clicksTags = createElement('p', ['clicks'], {
 	innerHTML: 'Количество ходов: <b class="clicks_counter">0</b>'
 })
 
+export const $timerToEnd = createElement('span', ['timer'], {
+	textContent: '00:00'
+})
+
 export const $field = createElement('div', ['field'], { ['data-id']: 'field' })
-$container.append($button, $field, $footer, $clicksTags)
-$footer.append($label, $countTags)
+$container.append($footer, $button, $field, $clicksTags, $timerToEnd)
+$footer.append($label, $countTags, $wrapperCountArrow)
+$wrapperCountArrow.append($arrowCountTop, $arrowCountBottom)
+
 
 export const createTag = (_, i) => i < cell - 1
 	? `<div class="tag" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`

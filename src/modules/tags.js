@@ -1,5 +1,5 @@
-import {changeFieldTags, rotationTags, startRound} from './listeners'
-import {$field, $button, createTag, $countTags} from "./pattern";
+import {changeFieldTags, rotationTags, startRound, triggerCounter} from './listeners'
+import {$field, $button, createTag, $countTags, $wrapperCountArrow} from "./pattern";
 import {cell} from "./variebles";
 
 let $tags
@@ -12,4 +12,5 @@ export function Tags() {
 	$field.addEventListener('click', rotationTags)
 
 	$countTags.addEventListener('change', changeFieldTags($tags))
+	$wrapperCountArrow.addEventListener('click', triggerCounter)
 }

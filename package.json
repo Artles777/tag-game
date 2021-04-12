@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-		"start": "parcel index.html"
-	},
+    "start": "parcel index.html"
+  },
   "author": "Artem Alesenko <alesenko19961996@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "bootstrap-icons": "^1.4.1",
     "parcel-bundler": "^1.12.4"
   }
 }
