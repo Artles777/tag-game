@@ -31,6 +31,7 @@
 	align-items: center;
 	color: #ffffff;
 	background: #c08218;
+	/*animation-duration: 0.5s;*/
 }
 
 .tag[data-id="null"] {
@@ -88,4 +89,14 @@ input[type=number]::-webkit-inner-spin-button {
 
 .clicks_counter {
 	font-size: 1.2rem;
+}
+
+.timer_wrapper {
+	position: absolute;
+	top: 5rem;
+	left: 1rem;
+}
+
+.timer {
+	font-weight: bold;
 }

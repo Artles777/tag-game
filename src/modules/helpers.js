@@ -1,4 +1,4 @@
-import {$countTags} from "./pattern";
+import {$countTags, $timerToEnd} from "./pattern";
 
 export function shuffleTagElements(array) {
 	for (let i = array.length - 1; i > 0; i--) {
@@ -25,26 +25,49 @@ export function createElement(tag, classes = [], options = {}) {
 	return el
 }
 
-export function newSizeTags(tag) {
-	tag.style.width = Math.floor((tag.offsetWidth - $countTags.value**1.5)) + 'px'
-	tag.style.height = Math.floor((tag.offsetHeight - $countTags.value**1.5)) + 'px'
+export function newSizeTags(tags) {
+	Array.from(tags.children).forEach(tag => {
+		tag.style.width = Math.floor((tag.offsetWidth - $countTags.value**1.5)) + 'px'
+		tag.style.height = Math.floor((tag.offsetHeight - $countTags.value**1.5)) + 'px'
+	})
 }
 
-export function countdownTimer(time, selector) {
+// export function countdownTimer(time, delay) {
+// 	const parseTime = time.split(':')
+// 	let minutes = parseTime[0]
+// 	let second = parseTime[1]
+//
+// 	const intervalID = setInterval(() => {
+// 		const selector = $timerToEnd
+// 		if (+second === 0) minutes = '0' + (minutes - 1).toString()
+// 		if (+second === 0) second = 60
+// 		second = +second - 1
+// 		if (+second < 10) second = '0' + second.toString();
+// 		if (minutes.toString() === '00' && second.toString() === '00') clearInterval(intervalID)
+// 		// const sel = document.querySelector(selector)
+// 		selector.textContent = `${minutes.toString()}:${second.toString()}`
+// 		if (`${minutes.toString()}:${second.toString()}` === '00:00') {
+// 			alert('вы проиграли!')
+// 		}
+// 	}, 1000)
+// }
+
+export function countdownTimer(cb, options = {}) {
+	const time = options.time || '10:00'
+	const delay = options.delay || 1000
 	const parseTime = time.split(':')
-	const second = parseTime[1].split('')
 	let minutes = parseTime[0]
-	let newSecond;
-	if (+second[0] === 0) {
-		newSecond = parseTime[1].slice(1)
-	}
-	const intervalID = setInterval(() => {
-		if (+newSecond === 0) minutes = '0' + (minutes - 1).toString()
-		if (+newSecond === 0) newSecond = 60
-		newSecond = +newSecond - 1
-		if (+newSecond < 10) newSecond = '0' + newSecond.toString();
-		if (minutes.toString() === '00' && newSecond.toString() === '00') clearInterval(intervalID)
-		const sel = document.querySelector(selector)
-		sel.textContent = `${minutes.toString()}:${newSecond.toString()}`
-	}, 1000)
+	let second = parseTime[1]
+	let timerId = setTimeout(function timer() {
+		if (+second === 0) minutes = '0' + (minutes - 1).toString()
+		if (+second === 0) second = 60
+		second = +second - 1
+		if (+second < 10) second = '0' + second.toString();
+		cb(`${minutes.toString()}:${second.toString()}`)
+		if (minutes.toString() === '00' && second.toString() === '00') {
+			clearTimeout(timerId)
+			return
+		}
+		timerId = setTimeout(timer, delay)
+	}, delay)
 }

@@ -1,4 +1,4 @@
-import {createElement} from "./helpers";
+import {createElement, countdownTimer} from "./helpers";
 import {cell, cols} from "./variebles";
 
 export const $container = createElement('div', ['container'])
@@ -36,20 +36,23 @@ export const $clicksTags = createElement('p', ['clicks'], {
 	innerHTML: 'Количество ходов: <b class="clicks_counter">0</b>'
 })
 
+export const $wrapperTimer = createElement('div', ['timer_wrapper'])
+
+export const $timerLabel = createElement('span', ['timer_label'], {
+	textContent: 'Время до завершения: '
+})
+
 export const $timerToEnd = createElement('span', ['timer'], {
-	textContent: '00:00'
+	textContent: '10:00'
 })
 
 export const $field = createElement('div', ['field'], { ['data-id']: 'field' })
-$container.append($footer, $button, $field, $clicksTags, $timerToEnd)
+
+$container.append($footer, $button, $field, $clicksTags, $wrapperTimer)
 $footer.append($label, $countTags, $wrapperCountArrow)
 $wrapperCountArrow.append($arrowCountTop, $arrowCountBottom)
+$wrapperTimer.append($timerLabel, $timerToEnd)
 
-
-export const createTag = (_, i) => i < cell - 1
-	? `<div class="tag" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
-	: `<div class="tag" id="null" data-id="null"></div>`
-
-export const newCreateTag = (_, i) => i < ($countTags.value ** 2) - 1
+export const createTag = (_, i) => i < ($countTags.value ** 2) - 1
 	? `<div class="tag" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
 	: `<div class="tag" id="null" data-id="null"></div>`
