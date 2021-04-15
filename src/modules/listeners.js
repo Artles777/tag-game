@@ -1,13 +1,12 @@
 import {
-	$button,
 	$container,
 	$countTags,
 	$field,
 	$message,
 	$clicksTags,
-	$timerToEnd,
+	$timerToEnd, rollingBackTags,
 } from './pattern'
-import {countdownTimer, newSizeTags, shuffleTagElements} from "./helpers";
+import {countdownTimer, newSizeTags, shuffleRandomizeIdTags} from "./helpers";
 import {createTags} from "./tags";
 
 let play = false
@@ -19,16 +18,9 @@ export function startRound() {
 	if (restart) {
 		const gameOver = '00:00'
 		const arrayTags = Array.from($field.children)
-		shuffleTagElements(arrayTags)
-		$field.innerHTML = ''
-		arrayTags.forEach((tag, idx) => {
-			idx < ($countTags.value**2)- 1 ? tag.id = (idx + 1).toString() : tag.id = 'null'
-			$field.insertAdjacentElement('beforeend', tag)
-			newSizeTags(tag)
-		})
+		shuffleRandomizeIdTags(arrayTags)
 
 		play = true
-		$countTags.setAttribute('disabled', 'true')
 		if (arrayTags.length === $countTags.value**2) restart = false
 		$message.style.display = 'none'
 		countdownTimer((el) => {
@@ -41,8 +33,7 @@ export function startRound() {
 				$countTags.removeAttribute('disabled')
 				clicks = 0
 				$timerToEnd.textContent = '10:00'
-				$field.innerHTML = ''
-				createTags()
+				rollingBackTags(arrayTags)
 			}
 		})
 	}
@@ -80,7 +71,7 @@ export function rotationTags(event) {
 		const arrayTags = Array.from($field.children)
 		arrayTags.forEach(tag => tag.id === tag.dataset.id ? finish += 1 : finish = 0)
 
-		if (finish === $countTags.value**2) {
+		if (finish === arrayTags.length) {
 			setTimeout(() => {
 				play = false
 				restart = true
@@ -96,18 +87,19 @@ export function rotationTags(event) {
 	}
 }
 
-export function changeFieldTags() {
+export function changeFieldTags(event) {
 	if (restart) {
+		let { value } = event.target
 
-		if ((+$countTags.value ^ 0) !== +$countTags.value) {
+		if ((+value ^ 0) !== +value) {
 			$countTags.value = Math.round(+$countTags.value)
 		}
 
-		if ($countTags.value < 3) {
+		if (value < 3) {
 			$countTags.value = 3
 		}
 
-		if ($countTags.value > 12) {
+		if (value > 12) {
 			$countTags.value = 12
 		}
 

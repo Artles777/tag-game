@@ -1,5 +1,5 @@
 import {createElement, countdownTimer} from "./helpers";
-import {cell, cols} from "./variebles";
+import {cols} from "./variebles";
 
 export const $container = createElement('div', ['container'])
 
@@ -56,3 +56,8 @@ $wrapperTimer.append($timerLabel, $timerToEnd)
 export const createTag = (_, i) => i < ($countTags.value ** 2) - 1
 	? `<div class="tag" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
 	: `<div class="tag" id="null" data-id="null"></div>`
+
+export const rollingBackTags = (array) => array.forEach((tag, idx) => {
+		tag.dataset.id = idx < (array.length) - 1 ? (idx +1).toString() : 'null'
+		tag.textContent = idx < (array.length) - 1 ? (idx +1).toString() : ''
+	})

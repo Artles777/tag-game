@@ -1,9 +1,10 @@
-import {$countTags, $timerToEnd} from "./pattern";
+import {$countTags} from "./pattern";
 
-export function shuffleTagElements(array) {
+export function shuffleRandomizeIdTags(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		let j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
+		[array[i].dataset.id, array[j].dataset.id] = [array[j].dataset.id, array[i].dataset.id];
+		[array[i].textContent, array[j].textContent] = [array[j].textContent, array[i].textContent];
 	}
 }
 
@@ -31,26 +32,6 @@ export function newSizeTags(tags) {
 		tag.style.height = Math.floor((tag.offsetHeight - $countTags.value**1.5)) + 'px'
 	})
 }
-
-// export function countdownTimer(time, delay) {
-// 	const parseTime = time.split(':')
-// 	let minutes = parseTime[0]
-// 	let second = parseTime[1]
-//
-// 	const intervalID = setInterval(() => {
-// 		const selector = $timerToEnd
-// 		if (+second === 0) minutes = '0' + (minutes - 1).toString()
-// 		if (+second === 0) second = 60
-// 		second = +second - 1
-// 		if (+second < 10) second = '0' + second.toString();
-// 		if (minutes.toString() === '00' && second.toString() === '00') clearInterval(intervalID)
-// 		// const sel = document.querySelector(selector)
-// 		selector.textContent = `${minutes.toString()}:${second.toString()}`
-// 		if (`${minutes.toString()}:${second.toString()}` === '00:00') {
-// 			alert('вы проиграли!')
-// 		}
-// 	}, 1000)
-// }
 
 export function countdownTimer(cb, options = {}) {
 	const time = options.time || '10:00'
