@@ -28,8 +28,8 @@ export function createElement(tag, classes = [], options = {}) {
 
 export function newSizeTags(tags) {
 	Array.from(tags.children).forEach(tag => {
-		tag.style.width = Math.floor((tag.offsetWidth - $countTags.value**1.5)) + 'px'
-		tag.style.height = Math.floor((tag.offsetHeight - $countTags.value**1.5)) + 'px'
+		tag.style.width = Math.floor((tag.offsetWidth - $countTags.value**1.25)) + 'px'
+		tag.style.height = Math.floor((tag.offsetHeight - $countTags.value**1.25)) + 'px'
 	})
 }
 
@@ -51,4 +51,12 @@ export function countdownTimer(cb, options = {}) {
 		}
 		timerId = setTimeout(timer, delay)
 	}, delay)
+}
+
+export function createAnimation(animationName, prevent, target, duration) {
+	prevent.classList.add(animationName)
+	prevent.style.setProperty('--animate-duration', duration || '250ms');
+	prevent.addEventListener('animationend', () => {
+		prevent.classList.remove(animationName)
+	});
 }

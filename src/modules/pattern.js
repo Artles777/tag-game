@@ -7,7 +7,7 @@ export const $message = createElement('p', ['message'], {
 	innerHTML: `Нажмите кнопку <b>Старт игры</b> для начала игры!`
 })
 
-export const $button = createElement('button', ['start'], {
+export const $start = createElement('button', ['start'], {
 	textContent: 'Старт игры'
 })
 
@@ -48,14 +48,14 @@ export const $timerToEnd = createElement('span', ['timer'], {
 
 export const $field = createElement('div', ['field'], { ['data-id']: 'field' })
 
-$container.append($footer, $button, $field, $clicksTags, $wrapperTimer)
+$container.append($footer, $start, $field, $clicksTags, $wrapperTimer)
 $footer.append($label, $countTags, $wrapperCountArrow)
 $wrapperCountArrow.append($arrowCountTop, $arrowCountBottom)
 $wrapperTimer.append($timerLabel, $timerToEnd)
 
 export const createTag = (_, i) => i < ($countTags.value ** 2) - 1
-	? `<div class="tag" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
-	: `<div class="tag" id="null" data-id="null"></div>`
+	? `<div class="tag animate__animated" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
+	: `<div class="tag animate__animated" id="null" data-id="null"></div>`
 
 export const rollingBackTags = (array) => array.forEach((tag, idx) => {
 		tag.dataset.id = idx < (array.length) - 1 ? (idx +1).toString() : 'null'

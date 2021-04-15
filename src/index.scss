@@ -1,8 +1,14 @@
+@import "~bootstrap/scss/bootstrap";
+
+body {
+	font-family: Roboto;
+}
+
 .container {
 	width: 70%;
 	height: 70%;
 	margin: 40px auto;
-	background: #c0a125;
+	background: $light;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -15,27 +21,26 @@
 	padding: 2px;
 	display: grid;
 	grid-template: repeat(4, 1fr) / repeat(4, 1fr);
-	border: 2px solid #ccc;
+	border: 2px solid $gray-500;
 	cursor: pointer;
 	margin: 1rem;
 }
 
 .tag {
-	border: 1px solid #c0a125;
-	width: 80px;
-	height: 80px;
+	border: 1px solid $blue-100;
+	width: 76px;
+	height: 76px;
 	min-width: 40px;
 	min-height: 40px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	color: #ffffff;
-	background: #c08218;
-	/*animation-duration: 0.5s;*/
-}
+	color: $white;
+	background: $blue-300;
 
-.tag[data-id="null"] {
-	background:  #c0a125;
+	&[data-id="null"] {
+		background:  $light;
+	}
 }
 
 .start {
@@ -43,6 +48,19 @@
 	padding: 5px 15px;
 	font-size: 16px;
 	cursor: pointer;
+	border: $border-color;
+	border-radius: $border-radius-lg;
+	background: $info;
+	font-weight: 500;
+	color: $white;
+
+	&:active {
+		background: $blue-200;
+	}
+
+	&:disabled {
+		opacity: .4;
+	}
 }
 
 .footer {
@@ -52,51 +70,52 @@
 	padding: 0.5rem 0;
 }
 
-.count_wrapper{
-	display: inline-flex;
-	flex-flow: column;
-}
-
 .count {
 	text-align: center;
-	width: 20px;
-	height: 20px;
+	width: 32px;
+	height: 24px;
 	font-size: 18px;
-	padding: 4px;
+	padding: 6px;
 	border: none;
 	outline: none;
 	margin-right: 4px;
-}
 
-.count_arrow {
-	font-size: 0.7rem;
-}
+	&_wrapper {
+		display: inline-flex;
+		flex-flow: column;
+	}
 
-input[type=number]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
+	&_arrow {
+		font-size: 0.7rem;
+	}
+
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
 }
 
 .label {
 	margin-right: 1rem;
 	font-size: 18px;
+	font-weight: 400;
 }
 
 .clicks {
 	position: absolute;
 	top: 1.5rem;
 	left: 1rem;
-}
 
-.clicks_counter {
-	font-size: 1.2rem;
-}
-
-.timer_wrapper {
-	position: absolute;
-	top: 5rem;
-	left: 1rem;
+	&_counter {
+		font-size: 1.2rem;
+	}
 }
 
 .timer {
 	font-weight: bold;
+
+	&_wrapper {
+		position: absolute;
+		top: 4rem;
+		left: 1rem;
+	}
 }
