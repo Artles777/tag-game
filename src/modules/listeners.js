@@ -9,22 +9,38 @@ import {
 import {countdownTimer, createAnimation, newSizeTags, shuffleRandomizeIdTags} from "./helpers";
 import {createTags} from "./tags";
 
-let play = false
+export let play = false
 let restart = true
 let finish = 0
 let clicks = 0
+let mutationTagsValue
+
+function observerMutationsTags() {
+	mutationTagsValue = new MutationObserver(cb => {
+		console.log(cb)
+	})
+
+	mutationTagsValue.observe($field, {
+		subtree: true,
+		attributes: true,
+		// characterData: true
+	})
+}
 
 export function startRound() {
 	if (restart) {
+		play = true
 		const gameOver = '00:00'
 		const arrayTags = Array.from($field.children)
-		shuffleRandomizeIdTags(arrayTags)
 
-		play = true
+		shuffleRandomizeIdTags(arrayTags)
 		$start.setAttribute('disabled', 'disabled')
 
 		if (arrayTags.length === $countTags.value**2) restart = false
 		$message.style.display = 'none'
+
+		observerMutationsTags()
+
 		countdownTimer((el) => {
 			$timerToEnd.textContent = el
 			if (el === gameOver) {
@@ -87,6 +103,7 @@ export function rotationTags(event) {
 
 		const arrayTags = Array.from($field.children)
 		arrayTags.forEach(tag => tag.id === tag.dataset.id ? finish += 1 : finish = 0)
+		// mutationTagsValue.disconnect()
 
 		if (finish === arrayTags.length) {
 			setTimeout(() => {
@@ -100,6 +117,8 @@ export function rotationTags(event) {
 				$countTags.removeAttribute('disabled')
 			}, 1000)
 		}
+
+		observerMutationsTags()
 	} else {
 		$container.prepend($message)
 	}
