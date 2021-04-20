@@ -1,19 +1,14 @@
-import {changeFieldTags, play, rotationTags, startRound, triggerCounter} from './listeners'
+import {changeFieldTags, rotationTags, startRound, triggerCounter} from './listeners'
 import {$field, $start, createTag, $countTags, $wrapperCountArrow, $container} from "./pattern";
+import {preStartMutationOptions} from "./mutationsOptions";
+import {mutationPreStart} from "./mutationsCallbacks";
 
 export function createTags() {
 	const tags = new Array($countTags.value ** 2).fill('').map(createTag)
 	$field.insertAdjacentHTML('beforeend', tags.join(' '))
 	$field.style.gridTemplate = `repeat(${$countTags.value}, 1fr) / repeat(${$countTags.value}, 1fr)`
-	const mutationPreStart = new MutationObserver(cb => {
-		if (!play) document.location.reload()
-	})
 
-	mutationPreStart.observe($container, {
-		subtree: true,
-		attributes: true,
-		characterData: true
-	})
+	mutationPreStart.observe($container, preStartMutationOptions)
 }
 
 export function eventsTags() {

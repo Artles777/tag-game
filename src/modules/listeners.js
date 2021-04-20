@@ -8,24 +8,14 @@ import {
 } from './pattern'
 import {countdownTimer, createAnimation, newSizeTags, shuffleRandomizeIdTags} from "./helpers";
 import {createTags} from "./tags";
+import {startMutationOptions} from "./mutationsOptions";
+import {mutationTagsValue} from "./mutationsCallbacks";
+import {onAnimationTags, onEditCheck} from "./checks";
 
 export let play = false
 let restart = true
 let finish = 0
 let clicks = 0
-let mutationTagsValue
-
-function observerMutationsTags() {
-	mutationTagsValue = new MutationObserver(cb => {
-		console.log(cb)
-	})
-
-	mutationTagsValue.observe($field, {
-		subtree: true,
-		attributes: true,
-		// characterData: true
-	})
-}
 
 export function startRound() {
 	if (restart) {
@@ -39,7 +29,7 @@ export function startRound() {
 		if (arrayTags.length === $countTags.value**2) restart = false
 		$message.style.display = 'none'
 
-		observerMutationsTags()
+		mutationTagsValue.observe($field, startMutationOptions)
 
 		countdownTimer((el) => {
 			$timerToEnd.textContent = el
@@ -47,7 +37,7 @@ export function startRound() {
 				play = false
 				restart = true
 				$message.style.display = 'block'
-				alert(`Вы проиграли! Вы сходили: ${clicks} раз`)
+				alert(`Вы проиграли! Сделано ходов: ${clicks}`)
 				$start.removeAttribute('disabled')
 				clicks = 0
 				$timerToEnd.textContent = '10:00'
@@ -61,64 +51,44 @@ export function rotationTags(event) {
 	if (play) {
 		restart = false
 		const $target = event.target
-		const { id } = $target.dataset
-		const size = $target.offsetWidth
+		const size = $target.offsetWidth || $target.offsetHeight
 		const $null = $field.querySelector('[data-id="null"]')
-		const { offsetTop, offsetLeft } = $null
 
-		if (id === 'field') return;
-		if ($target === $null) return;
-		if (offsetTop - $target.offsetTop > size) return;
-		if (offsetLeft - $target.offsetLeft > size) return;
-		if ($target.offsetTop - offsetTop > size) return;
-		if ($target.offsetLeft - offsetLeft > size) return;
+		if (onEditCheck($target, $null, size)) {
+			onAnimationTags($target, $null, size)
 
-		if (offsetTop - $target.offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
-		if ($target.offsetTop - offsetTop >= size && offsetLeft - $target.offsetLeft >= size) return;
-		if (offsetTop - $target.offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
-		if ($target.offsetTop - offsetTop >= size && $target.offsetLeft - offsetLeft >= size) return;
+			$null.dataset.id = $target.dataset.id
+			$target.dataset.id = 'null'
+			$null.textContent = $target.textContent
+			$target.textContent = ''
 
-		if ($target.offsetTop - offsetTop === size) {
-			createAnimation('animate__slideInUp', $null, $target)
+			mutationTagsValue.disconnect()
+			$null.addEventListener('animationend', () => mutationTagsValue.observe($field, startMutationOptions))
+
+			$clicksTags.innerHTML = `Количество ходов: <b class="clicks_counter">${clicks += 1}</b>`
+
+			const arrayTags = Array.from($field.children)
+			arrayTags.forEach(tag => {
+				if (tag.id <= 15) {
+					tag.id === tag.dataset.id && tag.id === tag.textContent ? finish += 1 : finish = 0
+				} else {
+					tag.id === tag.dataset.id ? finish += 1 : finish = 0
+				}
+			})
+
+			if (finish === arrayTags.length) {
+				setTimeout(() => {
+					play = false
+					restart = true
+					$message.style.display = 'block'
+					alert(`Вы победили за ${clicks} ходов!`)
+					$start.removeAttribute('disabled')
+					clicks = 0
+					$clicksTags.innerHTML = 'Количество ходов: <b class="clicks_counter">0</b>'
+					$countTags.removeAttribute('disabled')
+				}, 1000)
+			}
 		}
-
-		if (offsetTop - $target.offsetTop === size) {
-			createAnimation('animate__slideInDown', $null, $target)
-		}
-
-		if ($target.offsetLeft - offsetLeft === size) {
-			createAnimation('animate__slideInRight', $null, $target)
-		}
-
-		if (offsetLeft - $target.offsetLeft === size) {
-			createAnimation('animate__slideInLeft', $null, $target)
-		}
-
-		$null.dataset.id = id
-		$target.dataset.id = 'null'
-		$null.textContent = $target.textContent
-		$target.textContent = ''
-
-		$clicksTags.innerHTML = `Количество ходов: <b class="clicks_counter">${clicks += 1}</b>`
-
-		const arrayTags = Array.from($field.children)
-		arrayTags.forEach(tag => tag.id === tag.dataset.id ? finish += 1 : finish = 0)
-		// mutationTagsValue.disconnect()
-
-		if (finish === arrayTags.length) {
-			setTimeout(() => {
-				play = false
-				restart = true
-				$message.style.display = 'block'
-				alert(`Вы победили за ${clicks} ходов!`)
-				$start.removeAttribute('disabled')
-				clicks = 0
-				$clicksTags.innerHTML = 'Количество ходов: <b class="clicks_counter">0</b>'
-				$countTags.removeAttribute('disabled')
-			}, 1000)
-		}
-
-		observerMutationsTags()
 	} else {
 		$container.prepend($message)
 	}
@@ -143,7 +113,6 @@ export function changeFieldTags(event) {
 		$field.innerHTML = ''
 		createTags()
 		newSizeTags($field)
-		console.log($timerToEnd.textContent)
 	}
 }
 
