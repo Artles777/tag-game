@@ -1,4 +1,4 @@
-import './src/index.scss'
+import './index.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'animate.css/animate.min.css'
 import createApp from './src/app'

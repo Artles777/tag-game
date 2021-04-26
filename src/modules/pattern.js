@@ -1,5 +1,5 @@
-import {createElement, countdownTimer} from "./helpers";
-import {cols} from "./variebles";
+import {countdownTimer, createElement} from "./helpers";
+import {amountTags, clicksCounter} from "../store/state";
 
 export const $container = createElement('div', ['container'])
 
@@ -19,7 +19,7 @@ export const $label = createElement('label', ['label'], {
 
 export const $countTags = createElement('input', ['count'], {
 	type: 'number',
-	value: `${cols}`,
+	value: amountTags.getState(),
 	min: 3,
 	max: 12
 })
@@ -33,7 +33,7 @@ export const $arrowCountBottom = createElement('i', ['count_arrow', 'bi', 'bi-ca
 })
 
 export const $clicksTags = createElement('p', ['clicks'], {
-	innerHTML: 'Количество ходов: <b class="clicks_counter">0</b>'
+	innerHTML: `Количество ходов: <b class="clicks_counter">${clicksCounter.getState()}</b>`
 })
 
 export const $wrapperTimer = createElement('div', ['timer_wrapper'])
@@ -43,7 +43,7 @@ export const $timerLabel = createElement('span', ['timer_label'], {
 })
 
 export const $timerToEnd = createElement('span', ['timer'], {
-	textContent: '10:00'
+	textContent: countdownTimer().getTime()
 })
 
 export const $field = createElement('div', ['field'], { ['data-id']: 'field' })
