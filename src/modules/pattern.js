@@ -53,11 +53,10 @@ $footer.append($label, $countTags, $wrapperCountArrow)
 $wrapperCountArrow.append($arrowCountTop, $arrowCountBottom)
 $wrapperTimer.append($timerLabel, $timerToEnd)
 
-export const createTag = (_, i) => i < ($countTags.value ** 2) - 1
-	? `<div class="tag animate__animated" id="${i + 1}" data-id="${i + 1}">${i + 1}</div>`
-	: `<div class="tag animate__animated" id="null" data-id="null"></div>`
+export const createTag = (_, i) => `<div class="tag animate__animated">${i < (amountTags.getState() ** 2) - 1 ? i + 1 : ''}</div>`
 
 export const rollingBackTags = (array) => array.forEach((tag, idx) => {
-		tag.dataset.id = idx < (array.length) - 1 ? (idx +1).toString() : 'null'
+		tag.key = idx
 		tag.textContent = idx < (array.length) - 1 ? (idx +1).toString() : ''
+		tag.style.background = idx < (array.length) - 1 ? '#6ea8fe' : '#F8F9FA'
 	})

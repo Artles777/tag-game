@@ -1,12 +1,12 @@
 export const preStartMutationOptions  = {
     subtree: true,
-    attributeFilter: ['data-id', 'id', 'class'],
+    attributeFilter: ['class'],
     characterData: true
 }
 
 export const startMutationOptions = {
     subtree: true,
-    attributeFilter: ['data-id', 'id', 'style'],
+    attributeFilter: ['class', 'style'],
     characterData: true,
     childList: true
 }

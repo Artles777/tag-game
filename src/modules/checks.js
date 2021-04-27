@@ -39,7 +39,7 @@ export function onAnimationTags($target, $null, size) {
 
 export function finishedTagsGame() {
     const arrayTags = Array.from($field.children)
-    arrayTags.forEach(tag => tag.id === tag.dataset.id ? incrementFinish() : resetFinish())
+    arrayTags.forEach(tag => arrayTags.indexOf(tag) === tag.key ? incrementFinish() : resetFinish())
 
     if (finishGame.getState() === amountTags.getState() ** 2) {
         setTimeout(() => {
@@ -53,8 +53,4 @@ export function finishedTagsGame() {
             $start.removeAttribute('disabled')
         }, 1000)
     }
-}
-
-export function overTagsGame() {
-
 }

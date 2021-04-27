@@ -4,8 +4,8 @@ import {amountTags, finishGame} from "../store/state";
 export function shuffleRandomizeIdTags(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		let j = Math.floor(Math.random() * (i + 1));
-		[array[i].dataset.id, array[j].dataset.id] = [array[j].dataset.id, array[i].dataset.id];
 		[array[i].textContent, array[j].textContent] = [array[j].textContent, array[i].textContent];
+		[array[i].key, array[j].key] = [array[j].key, array[i].key];
 	}
 }
 
@@ -55,6 +55,7 @@ export function countdownTimer(cb, options = {}) {
 					clearTimeout(timerId)
 				}
 			}, delay)
+			return this
 		},
 		getTime() {
 			return time

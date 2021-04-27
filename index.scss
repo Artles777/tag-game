@@ -36,11 +36,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	color: $white;
-	background: $blue-300;
-
-	&[data-id="null"] {
-		background:  $light;
-	}
 }
 
 .start {

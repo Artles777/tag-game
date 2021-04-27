@@ -4,10 +4,9 @@ import {
 	$field,
 	$message,
 	$clicksTags,
-	$timerToEnd, rollingBackTags, $start,
+	$start,
 } from './pattern'
 import {
-	countdownTimer,
 	disconnectOnMutation,
 	newSizeTags,
 	observeOnMutation,
@@ -15,39 +14,25 @@ import {
 } from "./helpers";
 import {createTags} from "./tags";
 import {mutationOptionsDocument, preStartMutationOptions, startMutationOptions} from "./mutationsOptions";
-import {mutationPreStart, mutationTagsValue, mutationDocument} from "./mutationsCallbacks";
+import {mutationTagsValue, mutationDocument, mutationPreStart} from "./mutationsCallbacks";
 import {finishedTagsGame, onAnimationTags, onEditCheck} from "./checks";
-import {amountTags, clicksCounter, playGame, restartGame} from "../store/state";
+import {amountTags, clicksCounter, playGame, restartGame, tagsArray} from "../store/state";
 import {
 	changeAmountTags,
 	decrementAmountTags,
 	incrementAmountTags,
 	incrementClicks,
-	overGame,
 	startGame
 } from "../store/controllers";
+import {startTimer} from "./components/startTimerComponent";
+import {changeTag} from "./components/changeTagComponent";
+import {backgroundChange} from "./components/backgroundChangeComponent";
 
 const MOSelectors = new Map([
 	[$field, startMutationOptions],
 	[document, mutationOptionsDocument]
 ])
 
-function startTimer(arrayTags, gameOver) {
-	countdownTimer((time) => {
-		$timerToEnd.textContent = time
-		if (time === gameOver) {
-			overGame()
-			mutationPreStart.disconnect()
-			mutationTagsValue.disconnect()
-			$message.style.display = 'block'
-			alert(`Вы проиграли! Сделано ходов: ${clicksCounter.getState()}`)
-			$start.removeAttribute('disabled')
-			rollingBackTags(arrayTags)
-			$timerToEnd.textContent = countdownTimer().getTime()
-			mutationPreStart.observe($container, preStartMutationOptions)
-		}
-	}).start()
-}
 export function startRound() {
 	if (restartGame.getState()) {
 		startGame()
@@ -55,6 +40,7 @@ export function startRound() {
 		const arrayTags = Array.from($field.children)
 
 		shuffleRandomizeIdTags(arrayTags)
+		backgroundChange(arrayTags)
 		$start.setAttribute('disabled', 'disabled')
 
 		$message.style.display = 'none'
@@ -68,26 +54,18 @@ export function rotationTags(event) {
 	if (playGame.getState()) {
 		const $target = event.target
 		const size = $target.offsetWidth || $target.offsetHeight
-		const $null = $field.querySelector('[data-id="null"]')
+		const $null = Array.from($field.children).find(tag => tag.key === Array.from($field.children).length - 1)
 
 		if (onEditCheck($target, $null, size)) {
 			onAnimationTags($target, $null, size)
 
-			$null.dataset.id = $target.dataset.id
-			$target.dataset.id = 'null'
-			$null.textContent = $target.textContent
-			$target.textContent = ''
-
+			changeTag($target, $null)
 			disconnectOnMutation([mutationTagsValue, mutationDocument])
-
 			$null.addEventListener('animationend', () => {
 				observeOnMutation([mutationTagsValue, mutationDocument], MOSelectors)
 			})
-
-
 			incrementClicks()
 			clicksCounter.watch(click => $clicksTags.innerHTML = `Количество ходов: <b class="clicks_counter">${click}</b>`)
-
 			finishedTagsGame()
 		}
 	} else {
@@ -97,14 +75,8 @@ export function rotationTags(event) {
 
 export function changeFieldTags(event) {
 	if (restartGame.getState()) {
-		let { value } = event.target
-
-		if ((+value ^ 0) !== +value) {
-			$countTags.value = Math.round(+$countTags.value)
-		}
-		changeAmountTags(value)
+		changeAmountTags(event.target.value)
 		amountTags.watch(state => $countTags.value = state)
-
 		$field.innerHTML = ''
 		createTags()
 		newSizeTags($field)
@@ -115,12 +87,7 @@ export function triggerCounter(event) {
 	if (restartGame.getState()) {
 		amountTags.watch(state => $countTags.value = state)
 		const e = new Event('change');
-		if (event.target.id === 'increment') {
-			incrementAmountTags()
-			$countTags.dispatchEvent(e)
-		} else {
-			decrementAmountTags()
-			$countTags.dispatchEvent(e)
-		}
+		event.target.id === 'increment' ? incrementAmountTags() : decrementAmountTags()
+		$countTags.dispatchEvent(e)
 	}
 }
