@@ -1,4 +1,4 @@
-import {createEffect, createStore} from 'effector'
+import {createStore} from 'effector'
 import {
     changeAmountTags,
     decrementAmountTags,
@@ -10,7 +10,6 @@ import {
     resetFinish,
     startGame
 } from "./controllers";
-import {$field} from "../modules/pattern";
 
 export const clicksCounter = createStore(0)
     .on(incrementClicks, state => state + 1)
