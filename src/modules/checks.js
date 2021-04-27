@@ -1,4 +1,8 @@
-import {createAnimation} from "./helpers";
+import {countdownTimer, createAnimation} from "./helpers";
+import {$field, $message, $start, $timerToEnd} from "./pattern";
+import {incrementFinish, overGame, resetClicks, resetFinish} from "../store/controllers";
+import {amountTags, clicksCounter, finishGame} from "../store/state";
+import {mutationTagsValue} from "./mutationsCallbacks";
 
 export function onEditCheck($target, $null, size) {
     if ($target.dataset.id === 'field') return;
@@ -30,5 +34,23 @@ export function onAnimationTags($target, $null, size) {
 
     if ($null.offsetLeft - $target.offsetLeft === size) {
         createAnimation('animate__slideInLeft', $null, $target)
+    }
+}
+
+export function finishedTagsGame() {
+    const arrayTags = Array.from($field.children)
+    arrayTags.forEach(tag => arrayTags.indexOf(tag) === tag.key ? incrementFinish() : resetFinish())
+
+    if (finishGame.getState() === amountTags.getState() ** 2) {
+        setTimeout(() => {
+            overGame()
+            $message.style.display = 'block'
+            mutationTagsValue.disconnect()
+            alert(`Вы победили за ${clicksCounter.getState()} ходов!`)
+            $timerToEnd.textContent = countdownTimer().getTime()
+            resetClicks()
+            resetFinish()
+            $start.removeAttribute('disabled')
+        }, 1000)
     }
 }

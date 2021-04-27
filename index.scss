@@ -1,4 +1,4 @@
-@import "~bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 body {
 	font-family: Roboto;
@@ -36,11 +36,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	color: $white;
-	background: $blue-300;
-
-	&[data-id="null"] {
-		background:  $light;
-	}
 }
 
 .start {

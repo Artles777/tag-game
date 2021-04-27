@@ -1,10 +1,11 @@
 import {$countTags} from "./pattern";
+import {amountTags, finishGame} from "../store/state";
 
 export function shuffleRandomizeIdTags(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		let j = Math.floor(Math.random() * (i + 1));
-		[array[i].dataset.id, array[j].dataset.id] = [array[j].dataset.id, array[i].dataset.id];
 		[array[i].textContent, array[j].textContent] = [array[j].textContent, array[i].textContent];
+		[array[i].key, array[j].key] = [array[j].key, array[i].key];
 	}
 }
 
@@ -39,18 +40,27 @@ export function countdownTimer(cb, options = {}) {
 	const parseTime = time.split(':')
 	let minutes = parseTime[0]
 	let second = parseTime[1]
-	let timerId = setTimeout(function timer() {
-		if (+second === 0) minutes = '0' + (minutes - 1).toString()
-		if (+second === 0) second = 60
-		second = +second - 1
-		if (+second < 10) second = '0' + second.toString();
-		cb(`${minutes.toString()}:${second.toString()}`)
-		if (minutes.toString() === '00' && second.toString() === '00') {
-			clearTimeout(timerId)
-			return
+	return {
+		start() {
+			let timerId = setTimeout(function timer() {
+				if (+second === 0) minutes = '0' + (minutes - 1).toString()
+				if (+second === 0) second = 60
+				second = +second - 1
+				if (+second < 10) second = '0' + second.toString();
+				cb(`${minutes.toString()}:${second.toString()}`)
+				timerId = setTimeout(timer, delay)
+				if (minutes.toString() === '00' && second.toString() === '00') {
+					clearTimeout(timerId)
+				} else if (finishGame.getState() === amountTags.getState() ** 2) {
+					clearTimeout(timerId)
+				}
+			}, delay)
+			return this
+		},
+		getTime() {
+			return time
 		}
-		timerId = setTimeout(timer, delay)
-	}, delay)
+	}
 }
 
 export function createAnimation(animationName, prevent, target, duration) {
@@ -59,4 +69,18 @@ export function createAnimation(animationName, prevent, target, duration) {
 	prevent.addEventListener('animationend', () => {
 		prevent.classList.remove(animationName)
 	});
+}
+
+export function observeOnMutation(mutations = [], mutationMap) {
+	if (mutations.length) {
+		Array.from(mutationMap).forEach(([key, value], idx) => {
+			mutations[idx].observe(key, value)
+		})
+	}
+}
+
+export function disconnectOnMutation(mutations = []) {
+	if (mutations.length) {
+		mutations.forEach(mutation => mutation.disconnect())
+	}
 }

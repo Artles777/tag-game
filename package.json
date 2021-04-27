@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "author": "Artem Alesenko <alesenko19961996@gmail.com>",
   "license": "ISC",
@@ -13,9 +14,10 @@
     "animate.css": "^4.1.1",
     "bootstrap": "^5.0.0-beta3",
     "bootstrap-icons": "^1.4.1",
-    "parcel-bundler": "^1.12.4"
+    "effector": "^21.8.11"
   },
   "devDependencies": {
+    "parcel-bundler": "^1.12.5",
     "sass": "^1.32.8"
   }
 }
