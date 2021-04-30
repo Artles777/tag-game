@@ -1,11 +1,12 @@
-import {countdownTimer, createAnimation} from "./helpers";
+import {createAnimation} from "./helpers";
 import {$field, $message, $start, $timerToEnd} from "./pattern";
 import {incrementFinish, overGame, resetClicks, resetFinish} from "../store/controllers";
 import {amountTags, clicksCounter, finishGame} from "../store/state";
 import {mutationTagsValue} from "./mutationsCallbacks";
+import {countdownTimer} from "./components/countdownTimerComponent";
 
 export function onEditCheck($target, $null, size) {
-    if ($target.dataset.id === 'field') return;
+    if ($target === $field) return;
     if ($target === $null) return false;
     if ($null.offsetTop - $target.offsetTop > size) return false;
     if ($null.offsetLeft - $target.offsetLeft > size) return false;

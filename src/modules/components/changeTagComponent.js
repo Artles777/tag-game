@@ -1,8 +1,6 @@
 import {$field} from "../pattern";
 
 export function changeTag($target, $null) {
-    // $null.dataset.id = $target.dataset.id
-    // $target.dataset.id = 'null'
     $null.textContent = $target.textContent
     $target.textContent = ''
 

@@ -1,5 +1,6 @@
-import {countdownTimer, createElement} from "./helpers";
+import {createElement} from "./helpers";
 import {amountTags, clicksCounter} from "../store/state";
+import {countdownTimer} from "./components/countdownTimerComponent";
 
 export const $container = createElement('div', ['container'])
 
@@ -33,7 +34,11 @@ export const $arrowCountBottom = createElement('i', ['count_arrow', 'bi', 'bi-ca
 })
 
 export const $clicksTags = createElement('p', ['clicks'], {
-	innerHTML: `Количество ходов: <b class="clicks_counter">${clicksCounter.getState()}</b>`
+	textContent: 'Количество ходов: '
+})
+
+export const $clicksTagsCounter = createElement('b', ['clicks_counter'], {
+	innerHTML: `${clicksCounter.getState()}`
 })
 
 export const $wrapperTimer = createElement('div', ['timer_wrapper'])
@@ -46,9 +51,10 @@ export const $timerToEnd = createElement('span', ['timer'], {
 	textContent: countdownTimer().getTime()
 })
 
-export const $field = createElement('div', ['field'], { ['data-id']: 'field' })
+export const $field = createElement('div', ['field'])
 
 $container.append($footer, $start, $field, $clicksTags, $wrapperTimer)
+$clicksTags.append($clicksTagsCounter)
 $footer.append($label, $countTags, $wrapperCountArrow)
 $wrapperCountArrow.append($arrowCountTop, $arrowCountBottom)
 $wrapperTimer.append($timerLabel, $timerToEnd)

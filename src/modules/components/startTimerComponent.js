@@ -1,9 +1,9 @@
-import {countdownTimer} from "../helpers";
 import {$container, $message, $start, $timerToEnd, rollingBackTags} from "../pattern";
 import {overGame} from "../../store/controllers";
 import {mutationPreStart, mutationTagsValue} from "../mutationsCallbacks";
 import {clicksCounter} from "../../store/state";
-import {preStartMutationOptions} from "../mutationsOptions";
+import {mutationOptions} from "../mutationsOptions";
+import {countdownTimer} from "./countdownTimerComponent";
 
 export function startTimer(arrayTags, gameOver) {
     countdownTimer((time) => {
@@ -17,7 +17,7 @@ export function startTimer(arrayTags, gameOver) {
             $start.removeAttribute('disabled')
             rollingBackTags(arrayTags)
             $timerToEnd.textContent = countdownTimer().getTime()
-            mutationPreStart.observe($container, preStartMutationOptions)
+            mutationPreStart.observe($container, mutationOptions)
         }
     }).start()
 }
